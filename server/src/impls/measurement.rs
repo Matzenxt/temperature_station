@@ -1,4 +1,5 @@
 use actix_web::web::Data;
+use chrono::{DateTime, Utc};
 use futures::executor::block_on;
 use sqlx::{Pool, Arguments, Sqlite, Row};
 use sqlx::sqlite::{SqliteArguments, SqliteRow};
@@ -31,10 +32,12 @@ impl Database<Measurement> for Measurement {
             Measurement::parent_table_name(),
         );
 
+        let date_time: DateTime<Utc> = Utc::now();
+
         let mut args = SqliteArguments::default();
         args.add(&self.room);
         args.add(&self.device);
-        args.add(&self.date_time);
+        args.add(date_time);
         args.add(&self.temperature);
         args.add(&self.humidity);
 
