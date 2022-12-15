@@ -7,6 +7,9 @@ use common::models::measurement::Measurement;
 
 #[post("/measurement")]
 pub async fn add_measurement(measurement: Json<Measurement>, pool: web::Data<Pool<Sqlite>>) -> HttpResponse {
+
+    println!("Temp: {}°C, Humidity: {}%", measurement.temperature, measurement.humidity);
+
     let id = measurement.insert(&pool);
 
     HttpResponse::Ok()
