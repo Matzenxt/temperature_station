@@ -1,0 +1,17 @@
+[package]
+name = "temperature_station"
+version = "0.1.0"
+authors = ["Matthias Lodner <matthias@lodner.de>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[workspace]
+members = [
+    "common",
+    "server",
+]
+
+[dependencies]
+common = {path = "common"}
+server = {path = "server"}
