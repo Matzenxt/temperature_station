@@ -13,11 +13,7 @@ DHT dht(DHTPIN, DHTTYPE);
 const char* ssid = "Privat W-LAN";
 const char* password = "??????";
 
-const char* serverAddress = "http://192.168.0.88:9090/measurement";
-
-const char* server = "192.168.0.88";
-const char* port = "9090";
-const char* path = "measurement";
+const char* serverAddress = "http://temperature-station.lodner.dev:49090/measurement";
 
 void setup() {
   Serial.begin(9600);
@@ -65,7 +61,7 @@ void loop() {
     //const int capacity = JSON_OBJECT_SIZE(192);
     StaticJsonDocument<200> doc;
     doc["id"] = 0;
-    doc["room"] = "Räucherkammer";
+    doc["room"] = "Wohnung";
     doc["device"] = "Test 1";
     doc["date_time"] = "2021-11-03T15:13:39.259609+00:00";
     doc["temperature"].set(temperature);
