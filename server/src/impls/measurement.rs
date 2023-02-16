@@ -88,4 +88,45 @@ impl Database<Measurement> for Measurement {
 
         measurements
     }
+
+    fn get_by_search(search: Vec<String>, pool: &Data<Pool<Sqlite>>) -> Vec<Measurement> {
+        let statment = format!("SELECT *
+                FROM {} as m
+                WHERE m.room = '{}' AND date('{}') < m.date_time AND date('{}') > m.date_time
+                ",
+                               Measurement::parent_table_name(),
+                               search[0],
+                               search[1],
+                               search[2]
+        );
+
+        //println!("Statment: {}", statment);
+
+        let mut conn = block_on(pool.acquire()).unwrap();
+        let res = block_on(
+            sqlx::query(statment.as_str())
+            .fetch_all(&mut conn)
+        );
+        conn.detach();
+
+        let mut measurements: Vec<Measurement> = Vec::new();
+
+        match res {
+            Ok(records) => {
+                for record in records {
+                    measurements.push(
+                        Measurement::from_sqlite_row(record, pool)
+                    );
+                }
+            }
+            Err(err) => {
+                println!("Error while loading all measuring points for room {} between {} - {}:",
+                    search[0], search[1], search[2]
+                );
+                println!("{:#?}", err);
+            }
+        }
+
+        measurements
+    }
 }

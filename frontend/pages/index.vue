@@ -1,10 +1,5 @@
-<script lang="ts">
-import Measurement from "@/types/measurement";
+<script setup>
 
-export default ({
-  name: "index",
-  layout: "DefaultLayout"
-});
 </script>
 
 <template>

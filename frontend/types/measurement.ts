@@ -1,7 +1,8 @@
+
 interface Measurement {
   id: number;
   room: string;
-  deivce: string;
+  device: string;
   date_time: string;
   temperature: number;
   humidity: number;

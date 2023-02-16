@@ -6,11 +6,13 @@ use actix_web::{App, http, HttpServer, middleware};
 use actix_web::web::Data;
 use sqlx::sqlite::SqlitePoolOptions;
 use dotenv::dotenv;
-use crate::service::measurement::{add_measurement, get_all_measurements};
+use crate::service::measurement::{add_measurement, get_all_measurements, get_by_search};
+use crate::service::room::get_all_room;
 
 mod impls;
 mod service;
 mod traits;
+mod helper;
 
 
 #[actix_rt::main]
@@ -51,7 +53,8 @@ async fn main() -> io::Result<()> {
         // Services
         .service(add_measurement)
         .service(get_all_measurements)
-
+        .service(get_by_search)
+        .service(get_all_room)
     })
         .bind(format!("{}:{}", server_address, server_port))?
         .run()

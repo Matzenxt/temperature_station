@@ -22,4 +22,6 @@ pub trait Database<T> {
     fn delete(&self, pool: &web::Data<Pool<Sqlite>>);
 
     fn get_all(pool: &web::Data<Pool<Sqlite>>) -> Vec<T>;
+
+    fn get_by_search(search: Vec<String>, pool: &web::Data<Pool<Sqlite>>) -> Vec<T>;
 }

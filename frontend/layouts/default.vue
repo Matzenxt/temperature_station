@@ -1,18 +1,33 @@
 <script lang="ts">
-import Header from "~/components/Header.vue";
 
 export default {
   name: 'DefaultLayout',
-  components: {Header}
 }
 </script>
 
 <template>
-  <v-app>
-
-    <Header></Header>
-
-    <slot />
-
-  </v-app>
+  <div>
+    <v-card>
+      <v-layout>
+        <v-navigation-drawer
+            permanent
+        >
+          <v-list
+              density="compact"
+              nav
+          >
+            <v-list-item>
+              <NuxtLink to="/">Startseite</NuxtLink>
+            </v-list-item>
+            <v-list-item>
+              <NuxtLink to="/rooms">Räume</NuxtLink>
+            </v-list-item>
+          </v-list>
+        </v-navigation-drawer>
+        <v-main >
+          <slot />
+        </v-main>
+      </v-layout>
+    </v-card>
+  </div>
 </template>
