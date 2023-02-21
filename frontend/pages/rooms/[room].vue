@@ -15,17 +15,19 @@
       + room + "/" + toString + "/" + fromString;
 
   const { data: measurements } = await useFetch<Array<Measurement>>(uri, {key: room.toString()});
-
-  console.log(measurements);
 </script>
 
 <template>
   <div>
-    <p>Raum {{ room }}</p>
+    <v-card>
+      <v-card-title>{{ room }}</v-card-title>
 
-    <v-card v-for="measurement in measurements" :key="measurement.id">
-      <v-card-title>{{ measurement.room }}</v-card-title>
-      <v-card-text>Temperature: {{ measurement.temperature }}°C - Humidity: {{ measurement.humidity }}%</v-card-text>
+      <LineChart v-if="measurements != null" :measurements="measurements"></LineChart>
+
+      <v-card-text
+          v-for="measurement in measurements" :key="measurement.id">
+        Temperature: {{ measurement.temperature }}°C - Humidity: {{ measurement.humidity }}%
+      </v-card-text>
     </v-card>
   </div>
 </template>
