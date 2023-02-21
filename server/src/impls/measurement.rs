@@ -100,8 +100,6 @@ impl Database<Measurement> for Measurement {
                                search[2]
         );
 
-        //println!("Statment: {}", statment);
-
         let mut conn = block_on(pool.acquire()).unwrap();
         let res = block_on(
             sqlx::query(statment.as_str())
