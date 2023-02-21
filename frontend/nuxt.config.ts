@@ -14,6 +14,10 @@ export default defineNuxtConfig({
     typeCheck: true,
   },
 
+  modules: [
+    '@vueuse/nuxt',
+  ],
+
   css: ['vuetify/styles/main.sass',
       '@mdi/font/css/materialdesignicons.css'
   ],

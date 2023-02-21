@@ -1,5 +1,5 @@
 <script setup>
-  const { data: rooms } = await useFetch('http://192.168.1.104:9090/room');
+  const { data: rooms } = await useFetch('http://localhost:9090/room');
 </script>
 
 <template>
