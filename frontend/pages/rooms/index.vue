@@ -1,5 +1,7 @@
-<script setup>
-  const { data: rooms } = await useFetch('http://localhost:9090/room');
+<script lang="ts" setup>
+  const config = useRuntimeConfig();
+
+  const { data: rooms } = await useFetch(config.public.url + ':' + config.public.port + '/room');
 </script>
 
 <template>

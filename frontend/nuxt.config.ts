@@ -8,6 +8,13 @@ export default defineNuxtConfig({
     },
   },
 
+  runtimeConfig: {
+    public: {
+      url: process.env.SERVER_ADDRESS || 'http://localhost',
+      port: process.env.SERVER_PORT || '9090'
+    },
+  },
+
   // typescripts
   typescript: {
     strict: true,
