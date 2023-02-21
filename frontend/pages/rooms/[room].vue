@@ -8,13 +8,13 @@
   const dateFrom = new Date();
   dateFrom.setMinutes(dateTo.getMinutes() - 30);
 
-  const toString = dateTo.toUTCString();
-  const fromString = dateFrom.toUTCString();
+  const toString = dateTo.toISOString().slice(0, 19);
+  const fromString = dateFrom.toISOString().slice(0, 19);
 
   const test = 'http://192.168.1.104:9090/measurement/'
       + room + "/" + toString + "/" + fromString;
 
-  console.log(test);
+  console.log("BLA: " + test);
 
   const uri = 'http://192.168.1.104:9090/measurement/'
       + room + "/2000-02-17 00:15:00/2023-02-17 00:00:00";

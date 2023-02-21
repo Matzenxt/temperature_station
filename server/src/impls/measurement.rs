@@ -92,7 +92,7 @@ impl Database<Measurement> for Measurement {
     fn get_by_search(search: Vec<String>, pool: &Data<Pool<Sqlite>>) -> Vec<Measurement> {
         let statment = format!("SELECT *
                 FROM {} as m
-                WHERE m.room = '{}' AND date('{}') < m.date_time AND date('{}') > m.date_time
+                WHERE m.room = '{}' AND m.date_time <= '{}' AND m.date_time >= '{}'
                 ",
                                Measurement::parent_table_name(),
                                search[0],
