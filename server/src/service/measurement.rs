@@ -8,7 +8,7 @@ use common::models::measurement::Measurement;
 #[post("/measurement")]
 pub async fn add_measurement(measurement: Json<Measurement>, pool: web::Data<Pool<Sqlite>>) -> HttpResponse {
 
-    println!("Room: {} - Temp: {}°C, Humidity: {}%", measurement.room, measurement.temperature, measurement.humidity);
+    println!("Room: {} Device: {} - Temp: {}°C, Humidity: {}%", measurement.room, measurement.device, measurement.temperature, measurement.humidity);
 
     let id = measurement.insert(&pool);
 

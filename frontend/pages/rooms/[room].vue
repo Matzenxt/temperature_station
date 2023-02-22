@@ -18,8 +18,6 @@
   const uri = config.public.url + ':' + config.public.port + '/measurement/'
       + room + "/" + toString + "/" + fromString;
 
-  console.log("Uri:" + uri);
-
   let { data: measurements } = await useFetch<Array<Measurement>>(uri, {key: room.toString()});
 
   useIntervalFn(async () => {
@@ -40,7 +38,7 @@
 
       <v-card-text
           v-for="measurement in measurements" :key="measurement.id">
-        Temperature: {{ measurement.temperature }}°C - Humidity: {{ measurement.humidity }}%
+        Date: {{ measurement.date_time.slice(0, 19).replace('T', ' ') }} Device: {{ measurement.device }} - Temperature: {{ measurement.temperature }}°C - Humidity: {{ measurement.humidity }}%
       </v-card-text>
     </v-card>
   </div>
