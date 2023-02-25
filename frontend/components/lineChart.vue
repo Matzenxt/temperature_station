@@ -1,22 +1,6 @@
 <script lang="ts" setup>
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-} from 'chart.js'
-import { Line } from 'vue-chartjs'
-import {Measurement} from "~/types/measurement";
-
-  const props = defineProps<{
-    measurements: Measurement[];
-  }>();
-
-ChartJS.register(
+  import {
+    Chart as ChartJS,
     CategoryScale,
     LinearScale,
     PointElement,
@@ -24,19 +8,33 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend
-);
+  } from 'chart.js'
+  import { Line } from 'vue-chartjs'
+  import {useTempStationStore} from "~/store/tempstation";
+
+  ChartJS.register(
+      CategoryScale,
+      LinearScale,
+      PointElement,
+      LineElement,
+      Title,
+      Tooltip,
+      Legend
+  );
+
+  const store = useTempStationStore();
 
   const labels: Array<string> = [];
-  const temperatureData: Array<number> = [];
-  const humidityData: Array<number> = [];
+  let temperatureData: Array<number> = [];
+  let humidityData: Array<number> = [];
 
-  for (const measurement of props.measurements) {
+  for (const measurement of store.measurements) {
     labels.push(measurement.date_time.slice(0, 19).replace("T", " "));
     temperatureData.push(measurement.temperature);
     humidityData.push(measurement.humidity);
   }
 
-  const chartData = {
+  let chartData = {
     labels: labels,
     datasets: [
       {
@@ -56,6 +54,16 @@ ChartJS.register(
   const chartOptions = {
     responsive: true
   };
+
+  setInterval(() => {
+    temperatureData = [];
+    humidityData = [];
+
+    for (const measurement of store.measurementData) {
+      temperatureData.push(measurement.temperature);
+      humidityData.push(measurement.humidity);
+    }
+  }, 1000);
 
 </script>
 

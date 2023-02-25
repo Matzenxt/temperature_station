@@ -23,6 +23,7 @@ export default defineNuxtConfig({
 
   modules: [
     '@vueuse/nuxt',
+    '@pinia/nuxt',
   ],
 
   css: ['vuetify/styles/main.sass',

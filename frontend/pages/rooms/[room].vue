@@ -1,14 +1,15 @@
 <script lang="ts" setup>
   import {Measurement} from "~/types/measurement";
   import {$fetch} from "ofetch";
-  import {Ref} from "vue";
+  import {useTempStationStore} from "~/store/tempstation";
 
   const config = useRuntimeConfig();
+  const store = useTempStationStore();
 
   const intervalSeconds: number = 5;
   const intervalTime: number = intervalSeconds * 1000;
 
-  const diagramTimeMinutes = 200;
+  const diagramTimeMinutes = 290;
 
   const { room } = useRoute().params;
 
@@ -21,10 +22,9 @@
   let { data: measurements, pending, refresh} = await useAsyncData<Array<Measurement>>("measurements", () =>
       $fetch(config.public.url + ':' + config.public.port + '/measurement/' + room + '/' + dateTo.value + '/' + dateFrom.value ));
 
-  let points: Ref<Array<Measurement>> = ref([]);
-
   if (measurements.value != null) {
-    points.value = measurements.value;
+    //store.measurements = measurements.value;
+    store.updateTempListe(measurements.value);
   }
 
   useIntervalFn(async () => {
@@ -41,7 +41,10 @@
         refresh();
 
         if (measurements.value != null) {
-          points.value = measurements.value;
+          //store.measurements = measurements.value;
+          store.updateTempListe(measurements.value);
+        } else {
+          console.log("null");
         }
 
       }, intervalTime
@@ -53,10 +56,10 @@
     <v-card>
       <v-card-title>{{ room }}</v-card-title>
 
-      <LineChart v-if="measurements != null" :measurements="measurements"></LineChart>
+      <LineChart v-if="store.measurements.length > 0"></LineChart>
 
       <v-card-text
-          v-for="measurement in points" :key="measurement.id">
+          v-for="measurement in store.measurements" :key="measurement.id">
         Date: {{ measurement.date_time.slice(0, 19).replace('T', ' ') }} Device: {{ measurement.device }} - Temperature: {{ measurement.temperature }}°C - Humidity: {{ measurement.humidity }}%
       </v-card-text>
     </v-card>
