@@ -9,7 +9,7 @@
   const intervalSeconds: number = 5;
   const intervalTime: number = intervalSeconds * 1000;
 
-  const diagramTimeMinutes = 290;
+  const diagramTimeMinutes = 150;
 
   const { room } = useRoute().params;
 
