@@ -20,7 +20,9 @@
   let dateFrom = ref(date.toISOString().slice(0, 19));
 
   let { data: measurements, pending, refresh} = await useAsyncData<Array<Measurement>>("measurements", () =>
-      $fetch(config.public.url + ':' + config.public.port + '/measurement/' + room + '/' + dateTo.value + '/' + dateFrom.value ));
+      $fetch(config.public.url + '/measurement/' + room + '/' + dateTo.value + '/' + dateFrom.value, {
+        method: 'GET',
+      }));
 
   if (measurements.value != null) {
     //store.measurements = measurements.value;
