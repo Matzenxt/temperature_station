@@ -1,5 +1,6 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
+#include <WiFiClientSecure.h>
 #include <WiFiClient.h>
 #include <ArduinoJson.h>
 
@@ -10,14 +11,16 @@ DHT dht(DHTPIN, DHTTYPE);
 
 //-------------------------------------------------------------------------------------------
 
-const char* ssid = "Privat W-LAN";
+const char* ssid = "Privat-Wlan";
 const char* password = "99842DA5D0";
 
-const char* serverAddress = "http://api.temperature-station.lodner.dev/measurement";
+const char* serverAddress = "https://api.temperature-station.lodner.dev/measurement";
+
+WiFiClientSecure client;
+HTTPClient https;
 
 void setup() {
   Serial.begin(9600);
-  //Serial.begin(115200);
 
   WiFi.begin(ssid, password);
   Serial.println("Connecting");
@@ -35,11 +38,7 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   if (WiFi.status() == WL_CONNECTED) {
-    WiFiClient client;
-    HTTPClient http;
-
     float humidity = dht.readHumidity();
     float temperature = dht.readTemperature();
 
@@ -58,11 +57,10 @@ void loop() {
 
     // Create json
     Serial.println("Create JSON");
-    //const int capacity = JSON_OBJECT_SIZE(192);
     StaticJsonDocument<200> doc;
     doc["id"] = 0;
-    doc["room"] = "test";
-    doc["device"] = "test";
+    doc["room"] = "Räucherkammer";
+    doc["device"] = "Device 2";
     doc["date_time"] = "2021-11-03T15:13:39.259609+00:00";
     doc["temperature"].set(temperature);
     doc["humidity"].set(humidity);
@@ -74,14 +72,14 @@ void loop() {
 
     Serial.println("Json end.");
 
-    // Your Domain name with URL path or IP address with path
-    http.begin(client, serverAddress);
+    client.setInsecure();
 
-    // If you need an HTTP request with a content type: application/json, use the following:
-    http.addHeader("Content-Type", "application/json");
-    int httpCode = http.POST(output);
+    https.begin(client, serverAddress);
 
-    Serial.print("HTTP Response code: ");
+    https.addHeader("Content-Type", "application/json");
+    int httpCode = https.POST(output);
+
+    Serial.print("HTTPs Response code: ");
     Serial.println(httpCode);
 
     // httpCode will be negative on error
@@ -91,17 +89,17 @@ void loop() {
 
       // file found at server
       if (httpCode == HTTP_CODE_OK) {
-        const String& payload = http.getString();
+        const String& payload = https.getString();
         Serial.println("received payload:\n<<");
         Serial.println(payload);
         Serial.println(">>");
       }
     } else {
-      Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpCode).c_str());
+      Serial.printf("[HTTP] POST... failed, error: %s\n", https.errorToString(httpCode).c_str());
     }
 
     // Free resources
-    http.end();
+    https.end();
 
     delay(30000);
   } else {
