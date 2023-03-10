@@ -6,10 +6,10 @@
   const config = useRuntimeConfig();
   const store = useTempStationStore();
 
-  const intervalSeconds: number = 5;
+  const intervalSeconds: number = 15;
   const intervalTime: number = intervalSeconds * 1000;
 
-  const diagramTimeMinutes = 180;
+  const diagramTimeMinutes = 60*4;
 
   const { room } = useRoute().params;
 
@@ -30,7 +30,7 @@
   }
 
   useIntervalFn(async () => {
-        console.log("refreshing");
+        console.log("Refreshing room temperature and humidity.");
 
         const date = new Date();
         let to = date.toISOString().slice(0, 19);
