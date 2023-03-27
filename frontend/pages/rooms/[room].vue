@@ -64,7 +64,7 @@
 
       <v-card-text
           v-for="measurement in store.measurements" :key="measurement.id">
-        Date: {{ measurement.date_time.slice(0, 19).replace('T', ' ') }} Device: {{ measurement.device }} - Temperature: {{ measurement.temperature }}°C - Humidity: {{ measurement.humidity }}%
+        Date: {{ new Date(measurement.date_time).toLocaleString() }} Device: {{ measurement.device }} - Temperature: {{ measurement.temperature }}°C - Humidity: {{ measurement.humidity }}%
       </v-card-text>
     </v-card>
   </div>

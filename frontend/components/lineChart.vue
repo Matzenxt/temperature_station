@@ -11,7 +11,6 @@ import {
 } from 'chart.js'
   import { Line } from 'vue-chartjs'
   import {useTempStationStore} from "~/store/tempstation";
-  import {Ref} from "vue";
 
   ChartJS.register(
       CategoryScale,
@@ -30,7 +29,9 @@ import {
   let humidityData: Array<number> = Array<number>();
 
   for (const measurement of store.measurements) {
-    labels.push(measurement.date_time.slice(0, 19).replace("T", " "));
+    let date = new Date(measurement.date_time);
+
+    labels.push(date.toLocaleString());
     temperatureData.push(measurement.temperature);
     humidityData.push(measurement.humidity);
   }
@@ -63,7 +64,9 @@ import {
     humidityData = [];
 
     for (const measurement of store.measurementData) {
-      labels.push(measurement.date_time.slice(0, 19).replace("T", " "));
+      let date = new Date(measurement.date_time);
+
+      labels.push(date.toLocaleString());
       temperatureData.push(measurement.temperature);
       humidityData.push(measurement.humidity);
     }
