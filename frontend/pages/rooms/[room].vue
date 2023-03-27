@@ -6,6 +6,8 @@
   const config = useRuntimeConfig();
   const store = useTempStationStore();
 
+  store.clearMeasurementData();
+
   const intervalSeconds: number = 15;
   const intervalTime: number = intervalSeconds * 1000;
 

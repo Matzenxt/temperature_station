@@ -31,6 +31,9 @@ export const useTempStationStore = defineStore({
         this.humidityData.push(measurement.humidity);
       }
        */
+    },
+    clearMeasurementData() {
+      this.measurements = new Array<Measurement>();
     }
   },
   getters: {
