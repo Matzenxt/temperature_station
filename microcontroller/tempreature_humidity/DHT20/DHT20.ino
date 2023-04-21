@@ -78,7 +78,7 @@ void loop() {
     Serial.println("Create JSON");
     StaticJsonDocument<200> doc;
     doc["id"] = 0;
-    doc["room"] = "Kühlhaus Rückstellproben";
+    doc["room"] = "Test";
     doc["device"] = "Device 1";
     doc["date_time"] = "2021-11-03T15:13:39.259609+00:00";
     doc["temperature"].set(temperature);

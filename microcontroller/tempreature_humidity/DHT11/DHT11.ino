@@ -11,8 +11,8 @@ DHT dht(DHTPIN, DHTTYPE);
 
 //-------------------------------------------------------------------------------------------
 
-const char* ssid = "Privat-Wlan";
-const char* password = "99842DA5D0";
+const char* ssid = "SSID";
+const char* password = "PASSWORD";
 
 const char* serverAddress = "https://api.temperature-station.lodner.dev/measurement";
 
@@ -59,8 +59,8 @@ void loop() {
     Serial.println("Create JSON");
     StaticJsonDocument<200> doc;
     doc["id"] = 0;
-    doc["room"] = "Räucherkammer";
-    doc["device"] = "Device 2";
+    doc["room"] = "Test";
+    doc["device"] = "Device 1";
     doc["date_time"] = "2021-11-03T15:13:39.259609+00:00";
     doc["temperature"].set(temperature);
     doc["humidity"].set(humidity);
