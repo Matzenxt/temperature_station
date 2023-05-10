@@ -21,11 +21,6 @@ export default defineNuxtConfig({
     typeCheck: true,
   },
 
-  // TODO: Remove when pina got it working!
-  alias: {
-    pinia: "/node_modules/@pinia/nuxt/node_modules/pinia/dist/pinia.mjs"
-  },
-
   modules: [
     '@vueuse/nuxt',
     '@pinia/nuxt',
