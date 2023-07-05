@@ -8,11 +8,11 @@ edition = "2021"
 
 [dependencies]
 # Deserialize/Serialize
-serde = { version = "1.0.163", features = ["derive"] }
-serde_json = "1.0.96"
+serde = { version = "1.0.166", features = ["derive"] }
+serde_json = "1.0.100"
 
 # Database
-sqlx = { version = "0.6.3", features = [ "runtime-async-std-native-tls", "sqlite", "chrono" ] }
+sqlx = { version = "0.7.0", features = [ "runtime-async-std-native-tls", "sqlite", "chrono" ] }
 
 # Etc.
 chrono = { version = "0.4.26", features = [ "serde" ] }

@@ -18,7 +18,7 @@ pub fn get_all(pool: &Data<Pool<Sqlite>>) -> Vec<String> {
                 FROM {} AS m
                 GROUP BY m.room",
                             Measurement::parent_table_name()).as_str())
-            .fetch_all(&mut conn)
+            .fetch_all(&mut *conn)
     );
     conn.detach();
 

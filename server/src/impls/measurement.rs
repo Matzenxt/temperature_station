@@ -13,7 +13,7 @@ impl ParentTableName for Measurement {
 }
 
 impl Query<Measurement> for Measurement {
-    fn from_sqlite_row(row: SqliteRow, pool: &Data<Pool<Sqlite>>) -> Measurement {
+    fn from_sqlite_row(row: SqliteRow, _pool: &Data<Pool<Sqlite>>) -> Measurement {
         Measurement {
             id: row.get(0),
             room: row.get(1),
@@ -46,7 +46,7 @@ impl Database<Measurement> for Measurement {
             sqlx::query_with(
                 statement.as_str(),
                 args)
-                .execute(&mut conn)
+                .execute(&mut *conn)
         );
 
         println!("Insert measurement result:\n {:#?}", result);
@@ -54,11 +54,11 @@ impl Database<Measurement> for Measurement {
         result.unwrap().last_insert_rowid()
     }
 
-    fn update(&self, pool: &Data<Pool<Sqlite>>) {
+    fn update(&self, _pool: &Data<Pool<Sqlite>>) {
         todo!()
     }
 
-    fn delete(&self, pool: &Data<Pool<Sqlite>>) {
+    fn delete(&self, _pool: &Data<Pool<Sqlite>>) {
         todo!()
     }
 
@@ -66,7 +66,7 @@ impl Database<Measurement> for Measurement {
         let mut conn = block_on(pool.acquire()).unwrap();
         let res = block_on(
             sqlx::query(format!("SELECT * FROM {}", Measurement::parent_table_name()).as_str())
-                .fetch_all(&mut conn)
+                .fetch_all(&mut *conn)
         );
         conn.detach();
 
@@ -103,7 +103,7 @@ impl Database<Measurement> for Measurement {
         let mut conn = block_on(pool.acquire()).unwrap();
         let res = block_on(
             sqlx::query(statment.as_str())
-            .fetch_all(&mut conn)
+            .fetch_all(&mut *conn)
         );
         conn.detach();
 

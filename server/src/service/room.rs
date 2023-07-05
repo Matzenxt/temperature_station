@@ -1,9 +1,6 @@
-use actix_web::{get, post, HttpResponse, web};
-use actix_web::web::{Json, Path};
+use actix_web::{get, HttpResponse, web};
 use actix_web::http::header::ContentType;
 use sqlx::{Pool, Sqlite};
-use crate::traits::database::Database;
-use common::models::measurement::Measurement;
 use crate::helper;
 
 #[get("/room")]
