@@ -11,7 +11,7 @@
   const intervalSeconds: number = 15;
   const intervalTime: number = intervalSeconds * 1000;
 
-  const diagramTimeMinutes = 60*4;
+  const diagramTimeMinutes = 60*12;
 
   const { room } = useRoute().params;
 
@@ -31,34 +31,52 @@
     store.updateTempListe(measurements.value);
   }
 
-  useIntervalFn(async () => {
-        console.log("Refreshing room temperature and humidity.");
-
-        const date = new Date();
-        let to = date.toISOString().slice(0, 19);
-        date.setMinutes(date.getMinutes() - diagramTimeMinutes);
-        let from = date.toISOString().slice(0, 19);
-
-        dateTo.value = to;
-        dateFrom.value = from;
-
-        refresh();
-
-        if (measurements.value != null) {
-          //store.measurements = measurements.value;
-          store.updateTempListe(measurements.value);
-        } else {
-          console.log("null");
-        }
-
-      }, intervalTime
+  useIntervalFn(getMeasurePoints, intervalTime
   );
+  
+  async function getMeasurePoints() {
+    console.log("Refreshing room temperature and humidity.");
+
+    const date = new Date();
+    let to = date.toISOString().slice(0, 19);
+    date.setMinutes(date.getMinutes() - diagramTimeMinutes);
+    let from = date.toISOString().slice(0, 19);
+
+    dateTo.value = to;
+    dateFrom.value = from;
+
+    await refresh();
+
+    if (measurements.value != null) {
+      //store.measurements = measurements.value;
+      store.updateTempListe(measurements.value);
+    } else {
+      console.log("null");
+    }
+  }
 </script>
 
 <template>
   <div>
     <v-card>
-      <v-card-title>{{ room }}</v-card-title>
+      <v-card-title>
+        <v-btn
+            density="comfortable"
+            icon="mdi-refresh"
+            @click="getMeasurePoints()"
+            :disabled="pending"
+        >
+        </v-btn>
+
+        {{ room }}
+
+        <v-progress-circular
+            v-if="pending"
+            indeterminate
+            color="#9c9a9a"
+            size="30"
+        ></v-progress-circular>
+      </v-card-title>
 
       <LineChart v-if="store.measurements.length > 0"></LineChart>
 

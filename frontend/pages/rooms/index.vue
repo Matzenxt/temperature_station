@@ -1,29 +1,51 @@
 <script lang="ts" setup>
-  const intervalSeconds: number = 30;
+  const intervalSeconds: number = 10;
   const intervalTime: number = intervalSeconds * 1000;
 
   const config = useRuntimeConfig();
 
-  const { data: rooms, pending, refresh } = await useFetch(config.public.url + '/room', {
+  let { data: rooms, pending, refresh } = useFetch(config.public.url + '/room', {
     method: 'GET',
   });
 
-  useIntervalFn(async () => {
-        console.log("Refreshing room list.");
+  useIntervalFn(refreshRoomList, intervalTime);
 
-        refresh();
+  async function refreshRoomList() {
+    console.log("Refreshing room list.");
 
-      }, intervalTime
-  );
+    await refresh();
+  }
 </script>
 
 <template>
-  <div>
-    <h1>Raum übersicht</h1>
-    <v-card v-for="room in rooms">
+  <v-container>
+    <v-container>
+      <v-row>
+        <v-btn
+            density="comfortable"
+            icon="mdi-refresh"
+            @click="refreshRoomList()"
+            :disabled="pending"
+        >
+        </v-btn>
+
+        <h1>
+          Raum übersicht
+        </h1>
+
+        <v-progress-circular
+            v-if="pending"
+            indeterminate
+            color="#9c9a9a"
+            size="30"
+        ></v-progress-circular>
+      </v-row>
+    </v-container>
+
+    <v-card v-for="room in rooms" :key="room">
       <v-card-title><NuxtLink :to="'/rooms/' + room">{{ room }}</NuxtLink></v-card-title>
     </v-card>
-  </div>
+  </v-container>
 </template>
 
 <style scoped>
