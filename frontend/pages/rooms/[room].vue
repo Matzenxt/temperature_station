@@ -11,7 +11,7 @@
   const intervalSeconds: number = 15;
   const intervalTime: number = intervalSeconds * 1000;
 
-  const diagramTimeMinutes = 60*12;
+  const diagramTimeMinutes = 60*24*1;
 
   const { room } = useRoute().params;
 
