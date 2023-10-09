@@ -2,14 +2,18 @@
   import {Measurement} from "~/types/measurement";
   import {$fetch} from "ofetch";
   import {useTempStationStore} from "~/store/tempstation";
+  import {Ref} from "vue";
 
   const config = useRuntimeConfig();
   const store = useTempStationStore();
 
   store.clearMeasurementData();
 
-  const intervalSeconds: number = 15;
-  const intervalTime: number = intervalSeconds * 1000;
+  const baseIntervalSeconds: number = 120;
+  const baseIntervalTime: number = baseIntervalSeconds * 1000;
+
+  const intervalSeconds: Ref<number> = ref<number>(baseIntervalSeconds);
+  const intervalTime: Ref<number> = ref<number>(baseIntervalTime);
 
   const diagramTimeMinutes = 60*24*1;
 
@@ -31,8 +35,7 @@
     store.updateTempListe(measurements.value);
   }
 
-  useIntervalFn(getMeasurePoints, intervalTime
-  );
+  const {pause, resume, isActive} = useIntervalFn(getMeasurePoints, intervalTime);
   
   async function getMeasurePoints() {
     console.log("Refreshing room temperature and humidity.");
@@ -53,6 +56,10 @@
     } else {
       console.log("null");
     }
+  }
+
+  function updateIntervalTime() {
+    intervalTime.value = intervalSeconds.value * 1000;
   }
 </script>
 
@@ -78,11 +85,32 @@
         ></v-progress-circular>
       </v-card-title>
 
-      <LineChart v-if="store.measurements.length > 0"></LineChart>
+      <v-divider/>
 
-      <v-card-text
-          v-for="measurement in store.measurements" :key="measurement.id">
-        Date: {{ new Date(measurement.date_time).toLocaleString() }} Device: {{ measurement.device }} - Temperature: {{ measurement.temperature }}°C - Humidity: {{ measurement.humidity }}%
+      <v-card-text>
+        <v-text-field
+            label="Intervall"
+            hint="Aktualisierungs Intervall"
+            v-model="intervalSeconds"
+            type="number"
+            suffix="sec"
+            @change="updateIntervalTime()"
+        />
+
+        <LineChart v-if="store.measurements.length > 0"></LineChart>
+
+        <v-expansion-panels>
+          <v-expansion-panel>
+            <v-expansion-panel-title>Messdaten</v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <p
+                  v-for="measurement in store.measurements" :key="measurement.id">
+                Date: {{ new Date(measurement.date_time).toLocaleString() }} Device: {{ measurement.device }} - Temperature: {{ measurement.temperature }}°C - Humidity: {{ measurement.humidity }}%
+              </p>
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+        </v-expansion-panels>
+
       </v-card-text>
     </v-card>
   </div>

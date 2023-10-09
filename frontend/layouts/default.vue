@@ -11,6 +11,7 @@ export default {
       <v-layout>
         <v-navigation-drawer
             permanent
+            width="150"
         >
           <v-list
               density="compact"

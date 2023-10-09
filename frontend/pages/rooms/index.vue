@@ -1,6 +1,11 @@
 <script lang="ts" setup>
-  const intervalSeconds: number = 10;
-  const intervalTime: number = intervalSeconds * 1000;
+  import {Ref} from "vue";
+
+  const baseIntervalSeconds: number = 120;
+  const baseIntervalTime: number = baseIntervalSeconds * 1000;
+
+  const intervalSeconds: Ref<number> = ref<number>(baseIntervalSeconds);
+  const intervalTime: Ref<number> = ref<number>(baseIntervalTime);
 
   const config = useRuntimeConfig();
 
@@ -8,12 +13,16 @@
     method: 'GET',
   });
 
-  useIntervalFn(refreshRoomList, intervalTime);
+  const {pause, resume, isActive} = useIntervalFn(refreshRoomList, intervalTime);
 
   async function refreshRoomList() {
     console.log("Refreshing room list.");
 
-    await refresh();
+    //await refresh();
+  }
+
+  function updateIntervalTime() {
+    intervalTime.value = intervalSeconds.value * 1000;
   }
 </script>
 
@@ -39,6 +48,15 @@
             color="#9c9a9a"
             size="30"
         ></v-progress-circular>
+
+        <v-text-field
+            label="Intervall"
+            hint="Aktualisierungs Intervall"
+            v-model="intervalSeconds"
+            type="number"
+            suffix="sec"
+            @change="updateIntervalTime()"
+        />
       </v-row>
     </v-container>
 
