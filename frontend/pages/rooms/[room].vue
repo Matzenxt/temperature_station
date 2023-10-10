@@ -20,9 +20,11 @@
   const { room } = useRoute().params;
 
   const date = new Date();
+  let startString = "Von";
   let dateTo = ref(date.toISOString().slice(0, 19));
 
   date.setMinutes(date.getMinutes() - diagramTimeMinutes);
+  const endString = "Bis";
   let dateFrom = ref(date.toISOString().slice(0, 19));
 
   let { data: measurements, pending, refresh} = await useAsyncData<Array<Measurement>>("measurements", () =>
@@ -95,6 +97,10 @@
             type="number"
             suffix="sec"
             @change="updateIntervalTime()"
+        />
+        <DateTimePicker
+            v-bind:text="startString"
+            v-model:date="date"
         />
 
         <LineChart v-if="store.measurements.length > 0"></LineChart>
