@@ -15,7 +15,8 @@
   const intervalSeconds: Ref<number> = ref<number>(baseIntervalSeconds);
   const intervalTime: Ref<number> = ref<number>(baseIntervalTime);
 
-  const diagramTimeMinutes = 60*24*1;
+  const defaultDiagramTimeMinutes = 60 * 3 * 1;
+  let diagramTimeMinutes = ref<number>(defaultDiagramTimeMinutes);
 
   const { room } = useRoute().params;
 
@@ -23,7 +24,7 @@
   let startString = "Von";
   let dateTo = ref(date.toISOString().slice(0, 19));
 
-  date.setMinutes(date.getMinutes() - diagramTimeMinutes);
+  date.setMinutes(date.getMinutes() - diagramTimeMinutes.value);
   const endString = "Bis";
   let dateFrom = ref(date.toISOString().slice(0, 19));
 
@@ -44,7 +45,7 @@
 
     const date = new Date();
     let to = date.toISOString().slice(0, 19);
-    date.setMinutes(date.getMinutes() - diagramTimeMinutes);
+    date.setMinutes(date.getMinutes() - diagramTimeMinutes.value);
     let from = date.toISOString().slice(0, 19);
 
     dateTo.value = to;
@@ -90,18 +91,36 @@
       <v-divider/>
 
       <v-card-text>
-        <v-text-field
-            label="Intervall"
-            hint="Aktualisierungs Intervall"
-            v-model="intervalSeconds"
-            type="number"
-            suffix="sec"
-            @change="updateIntervalTime()"
-        />
-        <DateTimePicker
-            v-bind:text="startString"
-            v-model:date="date"
-        />
+        <v-row>
+          <v-col>
+            <v-text-field
+                label="Intervall"
+                hint="Aktualisierungs Intervall"
+                v-model="intervalSeconds"
+                type="number"
+                suffix="Sekunden"
+                @change="updateIntervalTime()"
+            />
+          </v-col>
+
+          <v-col>
+            <DateTimePicker
+                v-bind:text="startString"
+                v-model:date="date"
+            />
+          </v-col>
+
+          <v-col>
+            <v-text-field
+                label="Zeitraum"
+                hint="Zeitraum in Minuten"
+                v-model="diagramTimeMinutes"
+                type="number"
+                suffix="Minuten"
+                @keyup.enter="getMeasurePoints();"
+            />
+          </v-col>
+        </v-row>
 
         <LineChart v-if="store.measurements.length > 0"></LineChart>
 
