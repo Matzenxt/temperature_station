@@ -17,8 +17,7 @@
 
   async function refreshRoomList() {
     console.log("Refreshing room list.");
-
-    //await refresh();
+    await refresh();
   }
 
   function updateIntervalTime() {
