@@ -104,13 +104,6 @@
           </v-col>
 
           <v-col>
-            <DateTimePicker
-                v-bind:text="startString"
-                v-model:date="date"
-            />
-          </v-col>
-
-          <v-col>
             <v-text-field
                 label="Zeitraum"
                 hint="Zeitraum in Minuten"

@@ -21,6 +21,7 @@
   function log() {
     console.log("Date: " + dateTime.value + ", H: " + hours.value + ":" + minutes.value);
   }
+
   function pickDateTime() {
     let valid = true;
     if (dateTime.value.length <= 0) {
@@ -63,12 +64,12 @@
           color="primary"
           v-bind="props"
       >
-        {{ text }}: {{date.getFullYear()}}.{{date.getMonth().toString().padStart(2, '0')}}.{{date.getDay().toString().padStart(2, '0')}} - {{hours.toString().padStart(2, '0')}}:{{minutes.toString().padStart(2, '0')}}
+        {{ text }}: {{dateTime}} - {{hours.toString().padStart(2, '0')}}:{{minutes.toString().padStart(2, '0')}}
       </v-btn>
     </template>
 
     <v-card>
-      <v-card-title>Kategorie hinzufügen</v-card-title>
+      <v-card-title>Zeitpunkt auswählen</v-card-title>
 
       <v-divider/>
 
