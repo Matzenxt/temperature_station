@@ -18,7 +18,7 @@ export default {
               nav
           >
             <v-list-item>
-              <NuxtLink to="/">Startseite</NuxtLink>
+              <NuxtLink to="/">Dashboard</NuxtLink>
             </v-list-item>
             <v-list-item>
               <NuxtLink to="/rooms">Räume</NuxtLink>

@@ -1,10 +1,14 @@
 <script setup lang="ts">
-  import Dashboard from "~/dashboard/dashboard.vue";
 
 </script>
 
 <template>
-  <Dashboard/>
+  <div>
+    Temp:
+    Hum:
+    AVG Temp:
+    AVG: Hum:
+  </div>
 </template>
 
 <style scoped>
