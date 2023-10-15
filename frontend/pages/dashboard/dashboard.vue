@@ -1,6 +1,8 @@
 <script setup lang="ts">
-  import DashboardItem from "~/dashboard/dashboardItem.vue";
-  import DashboardSettings from "~/dashboard/dashboardSettings.vue";
+  import DashboardItem from "~/pages/dashboard/dashboardItem.vue";
+  import DashboardSettings from "~/pages/dashboard/dashboardSettings.vue";
+  import {DashboardItemData} from "~/types/dashboardItem";
+  import {getAllDashboardItems} from "~/network/dashboard";
 
   let rooms: string[] = [];
   if (process.client) {
@@ -11,6 +13,9 @@
       console.log("Loaded rooms: " + rooms);
     }
   }
+
+  let avgSeconds: number = 60 * 15;
+  let dashboardItems: DashboardItemData[] = await getAllDashboardItems(rooms, avgSeconds);
 
 </script>
 
@@ -26,13 +31,15 @@
     <v-card-text>
       <v-row no-gutters>
         <v-col
-            v-for="n in rooms.length"
-            :key="n"
+            v-for="dashboardItem in dashboardItems"
+            :key="dashboardItem.room_id"
             cols="12"
             sm="4"
         >
           <v-sheet class="ma-2 pa-2">
-            <DashboardItem/>
+            <DashboardItem
+                v-bind:dashboard-item="dashboardItem"
+            />
           </v-sheet>
         </v-col>
       </v-row>

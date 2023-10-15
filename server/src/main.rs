@@ -6,6 +6,7 @@ use actix_web::{App, http, HttpServer, middleware};
 use actix_web::web::Data;
 use sqlx::sqlite::SqlitePoolOptions;
 use dotenv::dotenv;
+use crate::service::dashboard::get_items_with_avg;
 use crate::service::measurement::{add_measurement, get_all_measurements, get_by_search};
 use crate::service::room::get_all_room;
 
@@ -36,6 +37,10 @@ async fn main() -> io::Result<()> {
             .allowed_methods(vec!["GET", "POST"])
             .allowed_headers(vec![
                 http::header::ACCESS_CONTROL_ALLOW_ORIGIN,
+                http::header::AUTHORIZATION,
+                http::header::ACCEPT,
+                http::header::CONTENT_TYPE,
+                http::header::ACCESS_CONTROL_ALLOW_CREDENTIALS,
             ])
             .max_age(3600);
 
@@ -49,7 +54,12 @@ async fn main() -> io::Result<()> {
         .service(add_measurement)
         .service(get_all_measurements)
         .service(get_by_search)
+
+        // Room
         .service(get_all_room)
+
+        // Dashboard
+            .service(get_items_with_avg)
     })
         .bind(format!("{}:{}", server_address, server_port))?
         .run()

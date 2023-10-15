@@ -1,4 +1,4 @@
-use std::ops::{Add, Sub};
+use std::ops::Sub;
 use crate::traits::database::ParentTableName;
 use actix_web::web::Data;
 use chrono::{DateTime, Duration, Utc};
@@ -23,13 +23,13 @@ fn from_sqlite_row(row: SqliteRow) -> DashboardItem {
     };
 }
 
-// TODO:
-pub fn get_by_room(room: String, avg_duration_seconds: i64, pool: &Data<Pool<Sqlite>>) -> Result<DashboardItem, Error> {
+// TODO: Check if time condition is correct
+pub fn get_by_room(room: &String, avg_duration_seconds: i64, pool: &Data<Pool<Sqlite>>) -> Result<DashboardItem, Error> {
     let end_time: DateTime<Utc> = Utc::now();
     let start_time: DateTime<Utc> = end_time.sub(Duration::seconds(avg_duration_seconds));
 
     let mut conn = block_on(pool.acquire()).unwrap();
-    let res = block_on(
+    let avg_res = block_on(
         sqlx::query(
             format!(
                 "SELECT m.id, m.room, AVG(m.temperature), AVG(m.humidity)
@@ -47,21 +47,21 @@ pub fn get_by_room(room: String, avg_duration_seconds: i64, pool: &Data<Pool<Sql
     );
     conn.detach();
 
-    match res {
+    match avg_res {
         Ok(record) => {
             Ok(DashboardItem {
                 room_id: 0,
-                room_name: "".to_string(),
+                room_name: record.get(1),
                 last_time: Default::default(),
                 temperature: 0.0,
                 humidity: 0.0,
                 avg_duration_seconds,
-                avg_temperature: 0.0,
-                avg_humidity: 0.0,
+                avg_temperature: record.get(2),
+                avg_humidity: record.get(3),
             })
         }
         Err(err) => {
-            println!("Error while loading all rooms:");
+            println!("Error while loading dashboard item:");
             println!("{:#?}", err);
             Err(Error::Decode(Box::new((err))))
         }
