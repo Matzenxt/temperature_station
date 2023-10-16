@@ -3,6 +3,7 @@
   const config = useRuntimeConfig();
 
   let dialog: Ref<boolean> = ref<boolean>(false);
+  let avgTimeSeconds: Ref<number> = ref<number>(900);
   let selectedRooms: Ref<string[]> = ref<string[]>([]);
 
   let { data: rooms, pending, refresh } = useFetch<string[]>(config.public.url + '/room', {
@@ -19,15 +20,21 @@
 
   if (process.client) {
     const content = localStorage.getItem("rooms");
+    const lsAVGTime = localStorage.getItem("dashboard_avgTimeSeconds");
 
     if (content != null) {
       selectedRooms.value = JSON.parse(content);
+    }
+
+    if (lsAVGTime != null) {
+      avgTimeSeconds.value = parseInt(lsAVGTime);
     }
   }
 
   function saveSettings() {
     if (process.client) {
       localStorage.setItem("rooms", JSON.stringify(selectedRooms.value));
+      localStorage.setItem("dashboard_avgTimeSeconds", avgTimeSeconds.value.toString());
     }
 
     closeDialog();
@@ -65,6 +72,14 @@
             chips
             multiple
         ></v-autocomplete>
+
+        <v-text-field
+            label="Durchschnitt Intervall"
+            hint="Dauer des Durchschnitt Intervalls"
+            v-model="avgTimeSeconds"
+            type="number"
+            suffix="sec"
+        />
 
       </v-card-text>
 

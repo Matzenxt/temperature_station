@@ -5,12 +5,12 @@ export async function getAllDashboardItems(rooms: String[], avgSeconds: number):
     const config = useRuntimeConfig();
 
     const requestOption = requestOptionsPOST(rooms);
-    let resp = await fetch(config.public.url + ":" + config.public.port + "/dashboard/items/" + avgSeconds, requestOption);
+    let resp = await fetch(config.public.url + "/dashboard/items/" + avgSeconds, requestOption);
     let text = await resp.text();
 
     if (resp.ok) {
-        let labels: Array<DashboardItemData> = JSON.parse(text);
-        return labels;
+        let dashboardItems: Array<DashboardItemData> = JSON.parse(text);
+        return dashboardItems;
     } else {
         return [];
     }

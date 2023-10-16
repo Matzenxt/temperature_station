@@ -5,17 +5,24 @@
   import {getAllDashboardItems} from "~/network/dashboard";
 
   let rooms: string[] = [];
+  let avgTimeSeconds: number = 900;
+
   if (process.client) {
     const content = localStorage.getItem("rooms");
+    const avgTime = localStorage.getItem("dashboard_avgTimeSeconds");
 
     if (content != null) {
       rooms = JSON.parse(content);
       console.log("Loaded rooms: " + rooms);
     }
+
+    if (avgTime != null) {
+      avgTimeSeconds = parseInt(avgTime);
+      console.log("Loaded avg time: " + avgTimeSeconds);
+    }
   }
 
-  let avgSeconds: number = 60 * 15;
-  let dashboardItems: DashboardItemData[] = await getAllDashboardItems(rooms, avgSeconds);
+  let dashboardItems: DashboardItemData[] = await getAllDashboardItems(rooms, avgTimeSeconds);
 
 </script>
 
