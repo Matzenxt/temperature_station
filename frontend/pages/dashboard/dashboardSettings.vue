@@ -2,6 +2,8 @@
   import {Ref, ref} from 'vue';
   const config = useRuntimeConfig();
 
+  const intervalSeconds: Ref<number> = ref<number>(120);
+
   let dialog: Ref<boolean> = ref<boolean>(false);
   let avgTimeSeconds: Ref<number> = ref<number>(900);
   let selectedRooms: Ref<string[]> = ref<string[]>([]);
@@ -21,6 +23,7 @@
   if (process.client) {
     const content = localStorage.getItem("rooms");
     const lsAVGTime = localStorage.getItem("dashboard_avgTimeSeconds");
+    const updateIntervalTimeSeconds = localStorage.getItem("dashboard_updateIntervalTimeSeconds");
 
     if (content != null) {
       selectedRooms.value = JSON.parse(content);
@@ -29,12 +32,17 @@
     if (lsAVGTime != null) {
       avgTimeSeconds.value = parseInt(lsAVGTime);
     }
+
+    if (updateIntervalTimeSeconds != null) {
+      intervalSeconds.value = parseInt(updateIntervalTimeSeconds);
+    }
   }
 
   function saveSettings() {
     if (process.client) {
       localStorage.setItem("rooms", JSON.stringify(selectedRooms.value));
       localStorage.setItem("dashboard_avgTimeSeconds", avgTimeSeconds.value.toString());
+      localStorage.setItem("dashboard_updateIntervalTimeSeconds", intervalSeconds.value.toString());
     }
 
     closeDialog();
@@ -77,6 +85,14 @@
             label="Durchschnitt Intervall"
             hint="Dauer des Durchschnitt Intervalls"
             v-model="avgTimeSeconds"
+            type="number"
+            suffix="sec"
+        />
+
+        <v-text-field
+            label="Aktualisierungs Intervall"
+            hint="Aktualisierungs Intervall"
+            v-model="intervalSeconds"
             type="number"
             suffix="sec"
         />

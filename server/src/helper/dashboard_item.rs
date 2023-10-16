@@ -9,7 +9,7 @@ use sqlx::{Error, Pool, Row, Sqlite};
 
 pub fn get_by_room(room: &String, avg_duration_seconds: i64, pool: &Data<Pool<Sqlite>>) -> Result<DashboardItem, Error> {
     let end_time: DateTime<Utc> = Utc::now();
-    let start_time: DateTime<Utc> = end_time.sub(Duration::seconds(avg_duration_seconds*100));
+    let start_time: DateTime<Utc> = end_time.sub(Duration::seconds(avg_duration_seconds));
 
     let mut conn = block_on(pool.acquire()).unwrap();
     let avg_res = block_on(
@@ -64,7 +64,7 @@ pub fn get_by_room(room: &String, avg_duration_seconds: i64, pool: &Data<Pool<Sq
     } else {
         println!("Error while loading dashboard item:");
 
-        Err(Error::Decode(Box::new((avg_res.err().unwrap()))))
+        Err(Error::Decode(Box::new(avg_res.err().unwrap())))
     }
 
 }

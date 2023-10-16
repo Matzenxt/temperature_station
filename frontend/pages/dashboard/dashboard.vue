@@ -1,15 +1,17 @@
 <script setup lang="ts">
   import DashboardItem from "~/pages/dashboard/dashboardItem.vue";
   import DashboardSettings from "~/pages/dashboard/dashboardSettings.vue";
-  import {DashboardItemData} from "~/types/dashboardItem";
-  import {getAllDashboardItems} from "~/network/dashboard";
+
+  const config = useRuntimeConfig();
 
   let rooms: string[] = [];
   let avgTimeSeconds: number = 900;
+  let updateInterval: number = 120 * 1000;
 
   if (process.client) {
     const content = localStorage.getItem("rooms");
     const avgTime = localStorage.getItem("dashboard_avgTimeSeconds");
+    const updateIntervallTimeSeconds = localStorage.getItem("dashboard_updateIntervalTimeSeconds");
 
     if (content != null) {
       rooms = JSON.parse(content);
@@ -20,9 +22,23 @@
       avgTimeSeconds = parseInt(avgTime);
       console.log("Loaded avg time: " + avgTimeSeconds);
     }
+
+    if (updateIntervallTimeSeconds != null) {
+      updateInterval = parseInt(updateIntervallTimeSeconds) * 1000;
+      console.log("Loaded update intervall time: " + updateIntervallTimeSeconds);
+    }
   }
 
-  let dashboardItems: DashboardItemData[] = await getAllDashboardItems(rooms, avgTimeSeconds);
+  let {data: dashboardItems, pending, refresh} = useFetch(config.public.url + '/dashboard/items/' + avgTimeSeconds, {
+    method: 'POST',
+    body: JSON.stringify(rooms)
+  });
+  const {pause, resume, isActive} = useIntervalFn(updateDashboardDate, updateInterval);
+
+  async function updateDashboardDate() {
+    console.log("Refreshing dashboard data.");
+    await refresh();
+  }
 
 </script>
 
@@ -31,6 +47,14 @@
     <v-card-title>
       Dashboard
       <DashboardSettings/>
+
+      <v-progress-circular
+          v-if="pending"
+          indeterminate
+          color="#9c9a9a"
+          size="30"
+      ></v-progress-circular>
+
     </v-card-title>
 
     <v-divider/>
