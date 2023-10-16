@@ -63,7 +63,6 @@
       <v-row no-gutters>
         <v-col
             v-for="dashboardItem in dashboardItems"
-            :key="dashboardItem.room_id"
             cols="12"
             sm="4"
         >

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import {DashboardItemData} from "~/types/dashboardItem";
+  import {DashboardItemData} from "~/types/dashboardItemData";
 
   const props = defineProps({
     dashboardItem: {type: DashboardItemData, required: true},
@@ -52,6 +52,7 @@
               :width="15"
               :model-value="dashboardItem.avg_temperature"
               color="red"
+              :disabled="true"
           >
             {{ dashboardItem.avg_temperature.toPrecision(4) }}°C
           </v-progress-circular>
@@ -63,6 +64,7 @@
               :width="15"
               :model-value="dashboardItem.avg_humidity"
               color="blue"
+              :disabled="true"
           >
             {{ dashboardItem.avg_humidity.toPrecision(4) }}%
           </v-progress-circular>

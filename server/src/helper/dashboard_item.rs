@@ -12,6 +12,7 @@ pub fn get_by_room(room: &String, avg_duration_seconds: i64, pool: &Data<Pool<Sq
     let start_time: DateTime<Utc> = end_time.sub(Duration::seconds(avg_duration_seconds));
 
     let mut conn = block_on(pool.acquire()).unwrap();
+    /*
     let avg_res = block_on(
         sqlx::query(
             format!(
@@ -28,7 +29,7 @@ pub fn get_by_room(room: &String, avg_duration_seconds: i64, pool: &Data<Pool<Sq
         )
         .fetch_one(&mut *conn),
     );
-
+*/
     let last_res = block_on(
         sqlx::query(
             format!(
@@ -47,8 +48,8 @@ pub fn get_by_room(room: &String, avg_duration_seconds: i64, pool: &Data<Pool<Sq
 
     conn.detach();
 
-    if avg_res.is_ok() && last_res.is_ok() {
-        let avg_record = avg_res.unwrap();
+    if last_res.is_ok() {
+        //let avg_record = avg_res.unwrap();
         let last_record = last_res.unwrap();
 
         Ok(DashboardItem {
@@ -58,13 +59,13 @@ pub fn get_by_room(room: &String, avg_duration_seconds: i64, pool: &Data<Pool<Sq
             temperature: last_record.get(2),
             humidity: last_record.get(3),
             avg_duration_seconds,
-            avg_temperature: avg_record.get(2),
-            avg_humidity: avg_record.get(3),
+            avg_temperature: 0.0,
+            avg_humidity: 0.0,
         })
     } else {
         println!("Error while loading dashboard item:");
 
-        Err(Error::Decode(Box::new(avg_res.err().unwrap())))
+        Err(Error::Decode(Box::new(last_res.err().unwrap())))
     }
 
 }

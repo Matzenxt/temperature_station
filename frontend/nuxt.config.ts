@@ -2,6 +2,8 @@
 import vuetify from "~/plugins/vuetify";
 
 export default defineNuxtConfig({
+  ssr: true,
+
   app: {
     head: {
       title: "Temperatur Station",
