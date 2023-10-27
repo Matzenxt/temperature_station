@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {Measurement} from "~/types/measurement";
+import {type Measurement} from "~/types/measurement";
 
 interface State {
   measurements: Array<Measurement>,

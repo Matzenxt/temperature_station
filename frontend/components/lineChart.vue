@@ -7,7 +7,8 @@ import {
   LineElement,
   Title,
   Tooltip,
-  Legend, ChartData
+  Legend,
+  type ChartData
 } from 'chart.js'
   import { Line } from 'vue-chartjs'
   import {useTempStationStore} from "~/store/tempstation";

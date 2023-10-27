@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import {Ref, ref} from 'vue';
+  import {type Ref, ref} from 'vue';
 
   let props = defineProps({
     text: {type: String, required: true},

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-  import {Measurement} from "~/types/measurement";
+  import {type Measurement} from "~/types/measurement";
   import {$fetch} from "ofetch";
   import {useTempStationStore} from "~/store/tempstation";
-  import {Ref} from "vue";
+  import {type Ref} from "vue";
 
   const config = useRuntimeConfig();
   const store = useTempStationStore();
