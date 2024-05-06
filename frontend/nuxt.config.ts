@@ -2,7 +2,7 @@
 import vuetify from "~/plugins/vuetify";
 
 export default defineNuxtConfig({
-  ssr: true,
+  ssr: false,
 
   app: {
     head: {
