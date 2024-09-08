@@ -35,4 +35,6 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
+
+  compatibilityDate: '2024-09-08',
 })
