@@ -8,8 +8,7 @@ interface State {
   humidityData: Array<number>,
 }
 
-export const useTempStationStore = defineStore({
-  id: 'temp-station-store',
+export const useTempStationStore = defineStore('temp-station-store', {
   state: (): State => ({
     measurements: [],
     labels: [],

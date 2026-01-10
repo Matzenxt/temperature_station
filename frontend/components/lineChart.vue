@@ -8,7 +8,7 @@ import {
   Title,
   Tooltip,
   Legend,
-  type ChartData
+  type ChartData, Filler
 } from 'chart.js'
   import { Line } from 'vue-chartjs'
   import {useTempStationStore} from "~/store/tempstation";
@@ -20,7 +20,8 @@ import {
       LineElement,
       Title,
       Tooltip,
-      Legend
+      Legend,
+      Filler,
   );
 
   const store = useTempStationStore();
@@ -45,18 +46,26 @@ import {
         data: temperatureData,
         borderColor: '#eb3636',
         backgroundColor: '#f59b9b',
+        fill: true,
       },
       {
         label: "Humidity",
         data: humidityData,
         borderColor: '#36A2EB',
         backgroundColor: '#9BD0F5',
+        fill: true,
       }
     ]
   });
 
   const chartOptions = {
-    responsive: true
+    responsive: true,
+    //scales: {
+    //  y: {
+    //    suggestedMin: -5,
+    //    suggestedMax: 20,
+    //  }
+    //},
   };
 
   setInterval(() => {
@@ -80,12 +89,14 @@ import {
           data: temperatureData,
           borderColor: '#eb3636',
           backgroundColor: '#f59b9b',
+          fill: true,
         },
         {
           label: "Humidity",
           data: humidityData,
           borderColor: '#36A2EB',
           backgroundColor: '#9BD0F5',
+          fill: true,
         }
       ]
     };

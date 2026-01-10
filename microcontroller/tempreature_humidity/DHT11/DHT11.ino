@@ -11,8 +11,8 @@ DHT dht(DHTPIN, DHTTYPE);
 
 //-------------------------------------------------------------------------------------------
 
-const char* ssid = "SSID";
-const char* password = "PASSWORD";
+const char* ssid = "Geniesserhotel Lodner";
+const char* password = "Lodner2023";
 
 const char* serverAddress = "https://api.temperature-station.lodner.dev/measurement";
 
@@ -59,7 +59,7 @@ void loop() {
     Serial.println("Create JSON");
     StaticJsonDocument<200> doc;
     doc["id"] = 0;
-    doc["room"] = "Test";
+    doc["room"] = "Mobil 1";
     doc["device"] = "Device 1";
     doc["date_time"] = "2021-11-03T15:13:39.259609+00:00";
     doc["temperature"].set(temperature);
@@ -101,7 +101,7 @@ void loop() {
     // Free resources
     https.end();
 
-    delay(30000);
+    delay(60000);
   } else {
     Serial.println("WiFi Disconnected");
   }

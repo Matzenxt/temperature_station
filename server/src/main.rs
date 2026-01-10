@@ -24,8 +24,7 @@ async fn main() -> io::Result<()> {
     let server_port = env::var("SERVER_PORT").expect("SERVER_PORT is not set in .env file");
     let database = env::var("DATABASE_URL").expect("DATABASE is not set in .env file");
 
-    env::set_var("RUST_LOG", "actix_web=debug,actix_server=info");
-    env_logger::init();
+    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
     let pool = SqlitePoolOptions::new()
         .max_connections(60)

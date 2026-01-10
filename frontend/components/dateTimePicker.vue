@@ -12,7 +12,7 @@
   const oldDate = new Date(props.date);
   let now = new Date(props.date);
 
-  let dateTime: Ref<string> = ref<string>(now.toISOString().split('T')[0]);
+  let dateTime: Ref<string> = ref<string>(now.toISOString().split('T')[0]!);
   let hours: Ref<number> = ref<number>(now.getHours());
   let minutes: Ref<number> = ref<number>(now.getMinutes());
 

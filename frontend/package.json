@@ -9,23 +9,23 @@
   },
   "devDependencies": {
     "@nuxt/types": "2.18.1",
-    "@types/node": "22.5.4",
-    "@vueuse/core": "11.0.3",
-    "@vueuse/nuxt": "11.0.3",
-    "nuxt": "3.13.1",
-    "typescript": "5.5.4",
-    "vue": "3.5.3",
-    "vue-tsc": "2.0.29"
+    "@types/node": "25.0.5",
+    "@vueuse/core": "14.1.0",
+    "@vueuse/nuxt": "14.1.0",
+    "nuxt": "4.2.2",
+    "typescript": "5.9.3",
+    "vue": "3.5.26",
+    "vue-tsc": "3.2.2"
   },
   "dependencies": {
     "@mdi/font": "7.4.47",
-    "@pinia/nuxt": "0.5.4",
-    "chart.js": "4.4.4",
-    "pinia": "2.2.2",
-    "sass": "1.78.0",
-    "vite": "5.4.3",
-    "vite-plugin-vuetify": "2.0.4",
-    "vue-chartjs": "5.3.1",
-    "vuetify": "3.7.1"
+    "@pinia/nuxt": "0.11.3",
+    "chart.js": "4.5.1",
+    "pinia": "3.0.4",
+    "sass": "1.97.2",
+    "vite": "7.3.1",
+    "vite-plugin-vuetify": "2.1.2",
+    "vue-chartjs": "5.3.3",
+    "vuetify": "3.11.6"
   }
 }
