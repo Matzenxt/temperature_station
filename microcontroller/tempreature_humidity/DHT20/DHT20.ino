@@ -4,13 +4,15 @@
 #include <WiFiClient.h>
 #include <ArduinoJson.h>
 
- #include "DHT20.h"
- DHT20 DHT;
+#define LED D0
+
+#include "DHT20.h"
+DHT20 DHT;
 
 //-------------------------------------------------------------------------------------------
 
-const char* ssid = "Geniesserhotel Lodner";
-const char* password = "Lodner2023";
+const char* ssid = "SSID";
+const char* password = "PASSWORD";
 
 const char* serverAddress = "https://api.temperature-station.lodner.dev/measurement";
 
@@ -19,6 +21,8 @@ HTTPClient https;
 
 void setup() {
   Serial.begin(9600);
+
+  pinMode(LED, OUTPUT);
 
   WiFi.begin(ssid, password);
   Serial.println("Connecting");
@@ -31,7 +35,9 @@ void setup() {
   Serial.println("");
   Serial.print("Connected to WiFi network with IP Address: ");
   Serial.println(WiFi.localIP());
+  digitalWrite(LED, HIGH);
 
+  Wire.begin();
   DHT.begin();
 
   delay(1000);
@@ -46,22 +52,30 @@ void loop() {
 
     switch (status)
     {
-      Serial.print("Status: ");
-     case DHT20_OK:
-       Serial.print("OK\t");
-       break;
-     case DHT20_ERROR_CHECKSUM:
-       Serial.print("Checksum error,\t");
-       break;
-     case DHT20_ERROR_CONNECT:
-       Serial.print("Connect error,\t");
-       break;
-     case DHT20_MISSING_BYTES:
-       Serial.print("Missing bytes,\t");
-       break;
-     default:
-       Serial.print("Unknown error,\t");
-       break;
+      case DHT20_OK:
+        Serial.print("OK");
+        break;
+      case DHT20_ERROR_CHECKSUM:
+        Serial.print("Checksum error");
+        break;
+      case DHT20_ERROR_CONNECT:
+        Serial.print("Connect error");
+        break;
+      case DHT20_MISSING_BYTES:
+        Serial.print("Missing bytes");
+        break;
+      case DHT20_ERROR_BYTES_ALL_ZERO:
+        Serial.print("All bytes read zero");
+        break;
+      case DHT20_ERROR_READ_TIMEOUT:
+        Serial.print("Read time out");
+        break;
+      case DHT20_ERROR_LASTREAD:
+        Serial.print("Error read too fast");
+        break;
+      default:
+        Serial.print("Unknown error");
+        break;
     }
 
     float humidity = DHT.getHumidity();
@@ -78,7 +92,7 @@ void loop() {
     Serial.println("Create JSON");
     StaticJsonDocument<200> doc;
     doc["id"] = 0;
-    doc["room"] = "Mobil";
+    doc["room"] = "Rose - Kühlhaus - Versand";
     doc["device"] = "Device 1";
     doc["date_time"] = "2021-11-03T15:13:39.259609+00:00";
     doc["temperature"].set(temperature);
@@ -91,6 +105,8 @@ void loop() {
     Serial.println("Json end.");
 
     client.setInsecure();
+
+    digitalWrite(LED, HIGH);
 
     https.begin(client, serverAddress);
 
@@ -118,9 +134,13 @@ void loop() {
 
     // Free resources
     https.end();
+    digitalWrite(LED, LOW);
 
-    delay(30000);
+
+    delay(30000); // 30 seconds
   } else {
+    digitalWrite(LED, LOW);
+
     Serial.println("WiFi Disconnected");
   }
 }

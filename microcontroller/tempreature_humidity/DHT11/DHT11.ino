@@ -5,14 +5,14 @@
 #include <ArduinoJson.h>
 
 #include "DHT.h"
-#define DHTPIN 13
+#define DHTPIN 14
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
 
 //-------------------------------------------------------------------------------------------
 
-const char* ssid = "Geniesserhotel Lodner";
-const char* password = "Lodner2023";
+const char* ssid = "SSID";
+const char* password = "PASSWORD";
 
 const char* serverAddress = "https://api.temperature-station.lodner.dev/measurement";
 
@@ -59,7 +59,7 @@ void loop() {
     Serial.println("Create JSON");
     StaticJsonDocument<200> doc;
     doc["id"] = 0;
-    doc["room"] = "Mobil 1";
+    doc["room"] = "Rose - Werkstatt";
     doc["device"] = "Device 1";
     doc["date_time"] = "2021-11-03T15:13:39.259609+00:00";
     doc["temperature"].set(temperature);
@@ -101,7 +101,7 @@ void loop() {
     // Free resources
     https.end();
 
-    delay(60000);
+    delay(300000); // 5 minutes
   } else {
     Serial.println("WiFi Disconnected");
   }
